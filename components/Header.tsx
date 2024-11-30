@@ -3,9 +3,14 @@ import React from "react";
 import Container from "./Container";
 import Form from "next/form";
 import Link from "next/link";
+import CardIcon from "./CardIcon";
+import { ShoppingBasket, User } from "lucide-react";
+import { currentUser } from "@clerk/nextjs/server";
+import { ClerkLoaded, SignedIn, SignInButton, UserButton } from "@clerk/nextjs";
 
+const Header = async () => {
+  const user = await currentUser();
 
-const Header = () => {
   return (
     <header className="w-full bg-white py-4 border-b border-b-gray-400">
       {/* This is a custom Container using the shadcn component */}
@@ -29,7 +34,54 @@ const Header = () => {
         </Form>
 
         {/* tabs */}
-        <div className="">tabs</div>
+        <div className="flex items-center gap-5">
+          {/* Cart Icon */}
+          <CardIcon />
+
+          <ClerkLoaded>
+            {/* Orders Icons */}
+            <SignedIn>
+              <Link
+                href={"/orders"}
+                className="flex items-center text-sm gap-2 border border-gray-200 px2 py-1 rounded-md shadow-md hover:shadow-none hoverEffect"
+              >
+                <ShoppingBasket className="text-darkBlue w-6 h-6" />
+
+                <div className="flex flex-col">
+                  <p className="text-xs">
+                    <span className="font-semibold">0</span> items
+                  </p>
+
+                  <p className="font-semibold">Orders</p>
+                </div>
+              </Link>
+            </SignedIn>
+
+            {/* Account Icon */}
+            {user ? (
+              <div className="flex items-center text-sm gap-2 border border-gray-200 px2 py-1 rounded-md shadow-md hover:shadow-none hoverEffect">
+                <UserButton />
+                <div className="flex flex-col">
+                  <p className="text-xs">Welcome Back</p>
+
+                  <p className="font-semibold">{user.fullName}</p>
+                </div>
+              </div>
+            ) : (
+              <SignInButton mode="modal">
+                <div className="flex items-center text-sm gap-2 border border-gray-200 px2 py-1 rounded-md shadow-md hover:shadow-none hoverEffect">
+                  <User className="w-6 h-6 text-darkBlue" />
+
+                  <div className="flex flex-col">
+                    <p className="text-xs">Account</p>
+
+                    <p className="font-semibold">Login</p>
+                  </div>
+                </div>
+              </SignInButton>
+            )}
+          </ClerkLoaded>
+        </div>
       </Container>
     </header>
   );
