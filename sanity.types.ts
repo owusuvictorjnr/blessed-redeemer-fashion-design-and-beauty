@@ -311,7 +311,7 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Variable: SALE_QUERY
 // Query: *[_type == "sale"] | order(name asc)
 export type SALE_QUERYResult = Array<{
-  image: any;
+  image: SanityImageAsset;
   _id: string;
   _type: "sale";
   _createdAt: string;
